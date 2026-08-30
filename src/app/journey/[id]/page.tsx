@@ -1,4 +1,3 @@
-import type { ComponentType } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +11,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RatingStars } from "@/components/ui/rating-stars";
+import { Stat } from "@/components/ui/stat";
 import { JourneyTimeline } from "@/features/journey/components/journey-timeline";
 
 export async function generateMetadata({
@@ -88,10 +88,16 @@ export default async function JourneyDetailsPage({
       </div>
 
       <dl className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <DetailStat icon={MapPin} label="Pickup" value={match.pickupNote} />
-        <DetailStat icon={MapPin} label="Drop" value={match.dropNote} />
-        <DetailStat icon={Milestone} label="Distance" value={`${match.distanceKm} km`} />
-        <DetailStat icon={Timer} label="Estimated time" value={formatDuration(match.durationMinutes)} />
+        {[
+          { icon: MapPin, label: "Pickup", value: match.pickupNote },
+          { icon: MapPin, label: "Drop", value: match.dropNote },
+          { icon: Milestone, label: "Distance", value: `${match.distanceKm} km` },
+          { icon: Timer, label: "Estimated time", value: formatDuration(match.durationMinutes) },
+        ].map((item) => (
+          <div key={item.label} className="rounded-lg border border-border bg-card p-4 shadow-sm">
+            <Stat icon={item.icon} label={item.label} value={item.value} mono={false} />
+          </div>
+        ))}
       </dl>
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-card p-5 shadow-sm">
@@ -134,28 +140,9 @@ export default async function JourneyDetailsPage({
 
       <Button asChild size="lg" className="mt-10 w-full sm:w-auto">
         <Link href={`/booking/${encodeURIComponent(match.id)}?${backQuery}`}>
-          Continue to booking summary <ArrowRight />
+          Review booking summary <ArrowRight />
         </Link>
       </Button>
     </section>
-  );
-}
-
-function DetailStat({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
-      <dt className="flex items-center gap-1.5 font-mono text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground">
-        <Icon className="size-3.5" /> {label}
-      </dt>
-      <dd className="mt-1.5 text-sm font-medium text-foreground">{value}</dd>
-    </div>
   );
 }

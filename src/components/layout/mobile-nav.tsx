@@ -26,7 +26,7 @@ export function MobileNav() {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
-        <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex h-full w-[86%] max-w-sm flex-col bg-surface p-6 shadow-(--shadow-lg) data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right">
+        <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex h-full w-[86%] max-w-sm flex-col bg-surface p-6 shadow-lg data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right">
           <div className="flex items-center justify-between">
             <Dialog.Title asChild>
               <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
@@ -57,7 +57,7 @@ export function MobileNav() {
             </Button>
             <Button asChild variant="outline" size="lg">
               <Link href="/driver/publish" onClick={() => setOpen(false)}>
-                Publish as a driver
+                Publish a journey
               </Link>
             </Button>
           </div>

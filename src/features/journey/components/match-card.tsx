@@ -1,12 +1,12 @@
-import type { ComponentType } from "react";
 import Link from "next/link";
-import { ArrowRight, Clock, Users, Wallet } from "lucide-react";
+import { ArrowRight, Clock, ShieldCheck, Users, Wallet } from "lucide-react";
 
 import { getLocation } from "@/features/journey/data/locations";
 import { formatDuration, formatFare } from "@/features/journey/lib/geo";
 import type { MatchOption } from "@/features/journey/types";
 import { Badge } from "@/components/ui/badge";
 import { RatingStars } from "@/components/ui/rating-stars";
+import { Stat } from "@/components/ui/stat";
 import { cn } from "@/lib/utils";
 
 const BADGE_VARIANT: Record<MatchOption["kind"], "success" | "info" | "neutral" | "outline"> = {
@@ -40,8 +40,10 @@ export function MatchCard({ match, query }: { match: MatchOption; query: string 
         {origin?.name} <ArrowRight className="inline size-5 -translate-y-0.5 text-muted-foreground" /> {destination?.name}
       </h3>
 
-      <p className="mt-1.5 text-sm text-muted-foreground">
-        {match.driver.name} &middot; {match.driver.vehicle}
+      <p className="mt-1.5 flex items-center gap-1.5 text-sm text-muted-foreground">
+        {match.driver.name}
+        <ShieldCheck className="size-3.5 text-secondary" aria-label="Verified driver" />
+        &middot; {match.driver.vehicle}
       </p>
 
       <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-5 sm:grid-cols-4">
@@ -73,34 +75,5 @@ export function MatchCard({ match, query }: { match: MatchOption; query: string 
         </Link>
       </div>
     </article>
-  );
-}
-
-function Stat({
-  icon: Icon,
-  label,
-  value,
-  emphasis,
-}: {
-  icon?: ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-  emphasis?: boolean;
-}) {
-  return (
-    <div>
-      <dt className="flex items-center gap-1 font-mono text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground">
-        {Icon && <Icon className="size-3" />}
-        {label}
-      </dt>
-      <dd
-        className={cn(
-          "mt-1 font-mono text-sm font-semibold tabular-nums",
-          emphasis ? "text-success" : "text-foreground",
-        )}
-      >
-        {value}
-      </dd>
-    </div>
   );
 }

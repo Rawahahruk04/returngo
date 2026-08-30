@@ -21,7 +21,7 @@ export default function PlanJourneyPage() {
         already heading that way before we look at anything else.
       </p>
 
-      <div className="mt-10 rounded-(--radius-lg) border border-border bg-card p-6 shadow-(--shadow-sm) sm:p-8">
+      <div className="mt-10 rounded-lg border border-border bg-card p-6 shadow-sm sm:p-8">
         <JourneyPlannerForm />
       </div>
     </section>

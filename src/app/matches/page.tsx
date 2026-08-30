@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Car, HeartPulse, Plane, Route as RouteIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, Car, HeartPulse, Plane, Route as RouteIcon, Sparkles } from "lucide-react";
 
 import { getLocation } from "@/features/journey/data/locations";
 import { getMatchesForQuery } from "@/features/journey/data/matches";
@@ -92,6 +92,7 @@ export default async function SmartMatchesPage({
         {typeMeta.note}
       </p>
 
+      <h2 className="sr-only">Ranked matches for this journey</h2>
       <div className="mt-8 flex flex-col gap-4">
         <RevealList>
           {matches.map((match) => (
@@ -99,6 +100,21 @@ export default async function SmartMatchesPage({
           ))}
         </RevealList>
       </div>
+
+      <Link
+        href={`/matches/engine?${queryString}`}
+        className="mt-6 flex items-center justify-between gap-3 rounded-lg border border-secondary/40 bg-secondary/5 p-5 text-left transition-colors hover:bg-secondary/10"
+      >
+        <span>
+          <span className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wide text-secondary">
+            <Sparkles className="size-3.5" /> See the Match Engine&apos;s reasoning
+          </span>
+          <span className="mt-1 block text-sm text-muted-foreground">
+            Every score, explanation, and regional impact figure behind these matches — ranked and explainable.
+          </span>
+        </span>
+        <ArrowRight className="size-4 shrink-0 text-secondary" />
+      </Link>
 
       <div className="mt-10 rounded-lg border border-dashed border-border p-5 text-sm text-muted-foreground">
         None of these fit your schedule?{" "}

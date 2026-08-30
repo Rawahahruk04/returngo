@@ -21,6 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Stat } from "@/components/ui/stat";
 
 export function BookingSummaryClient({
   match,
@@ -94,12 +95,12 @@ export function BookingSummaryClient({
           <section className="rounded-lg border border-border bg-card p-5 shadow-sm sm:p-6">
             <h2 className="font-display text-lg font-semibold text-foreground">Trip</h2>
             <dl className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              <SummaryField label="Route" value={`${origin?.name} → ${destination?.name}`} />
-              <SummaryField label="Date" value={travelDateLabel} />
-              <SummaryField label="Departure" value={match.departure} />
-              <SummaryField label="Pickup" value={match.pickupNote} />
-              <SummaryField label="Drop" value={match.dropNote} />
-              <SummaryField label="Duration" value={formatDuration(match.durationMinutes)} />
+              <Stat mono={false} label="Route" value={`${origin?.name} → ${destination?.name}`} />
+              <Stat mono={false} label="Date" value={travelDateLabel} />
+              <Stat mono={false} label="Departure" value={match.departure} />
+              <Stat mono={false} label="Pickup" value={match.pickupNote} />
+              <Stat mono={false} label="Drop" value={match.dropNote} />
+              <Stat mono={false} label="Duration" value={formatDuration(match.durationMinutes)} />
             </dl>
           </section>
 
@@ -168,14 +169,5 @@ export function BookingSummaryClient({
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-function SummaryField({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="font-mono text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
-      <dd className="mt-1 text-sm font-medium text-foreground">{value}</dd>
-    </div>
   );
 }

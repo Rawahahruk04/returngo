@@ -25,9 +25,9 @@ export const passengerNav: NavItem[] = [
 
 export const driverNav: NavItem[] = [
   {
-    label: "Driver dashboard",
+    label: "Driver workspace",
     href: "/driver",
-    description: "Publish an empty return leg and see who's already waiting for it.",
+    description: "Publish a journey and see who's already waiting for it.",
   },
 ];
 
@@ -48,8 +48,8 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
     title: "Drivers & fleets",
     items: [
       { label: "Publish a journey", href: "/driver/publish", description: "" },
-      { label: "Return opportunities", href: "/driver/match", description: "" },
-      { label: "Driver dashboard", href: "/driver", description: "" },
+      { label: "Passenger requests", href: "/driver/requests", description: "" },
+      { label: "Driver workspace", href: "/driver", description: "" },
     ],
   },
   {
