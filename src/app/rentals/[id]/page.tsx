@@ -7,6 +7,7 @@ import { ArrowLeft, Car, Fuel, Gauge, Key, ShipWheel, Users } from "lucide-react
 
 import { getLocation } from "@/features/journey/data/locations";
 import { formatFare } from "@/features/journey/lib/geo";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { SegmentedControl, type SegmentedOption } from "@/components/ui/segmented-control";
@@ -68,9 +69,7 @@ export default function RentalVehicleDetailsPage() {
           <Car className="size-7" />
         </span>
         <div>
-          <span className="rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-            {VEHICLE_CATEGORY_LABEL[vehicle.category]}
-          </span>
+          <Badge variant="neutral">{VEHICLE_CATEGORY_LABEL[vehicle.category]}</Badge>
           <h1 className="mt-2 font-display text-2xl font-semibold text-foreground sm:text-3xl">
             {vehicle.brand} {vehicle.model}
           </h1>

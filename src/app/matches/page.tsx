@@ -7,6 +7,7 @@ import { getMatchesForQuery } from "@/features/journey/data/matches";
 import type { JourneyType, TripType } from "@/features/journey/types";
 import { MatchCard } from "@/features/journey/components/match-card";
 import { RevealList } from "@/components/motion/reveal-list";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
@@ -93,9 +94,7 @@ export default async function SmartMatchesPage({
         <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium uppercase tracking-widest text-secondary">
           <TypeIcon className="size-3.5" /> {typeMeta.label}
         </span>
-        <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
-          {tripType === "entire" ? "Entire Taxi" : "Share Seat"}
-        </span>
+        <Badge variant="neutral">{tripType === "entire" ? "Entire Taxi" : "Share Seat"}</Badge>
         <span className="text-xs text-muted-foreground">Step 2 of 3</span>
       </div>
 

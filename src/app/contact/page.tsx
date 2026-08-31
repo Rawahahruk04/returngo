@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 const CONTACT_POINTS = [
-  { icon: Mail, label: "Email", value: "hello@returngo.example" },
-  { icon: Phone, label: "Phone", value: "+91 80000 00000" },
+  { icon: Mail, label: "Email", value: "hello@returngo.in" },
+  { icon: Phone, label: "Phone", value: "+91 82345 67890" },
   { icon: MapPin, label: "Office", value: "Mangalore, Karnataka" },
 ];
 
@@ -44,7 +44,7 @@ export default function ContactPage() {
         </dl>
 
         <form
-          action="mailto:hello@returngo.example"
+          action="mailto:hello@returngo.in"
           method="post"
           encType="text/plain"
           className="flex flex-col gap-5 rounded-lg border border-border bg-card p-6 shadow-sm"

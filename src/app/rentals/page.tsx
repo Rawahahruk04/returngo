@@ -6,6 +6,7 @@ import { Car, Fuel, Gauge, Users } from "lucide-react";
 
 import { locationGroups, locations, getLocation } from "@/features/journey/data/locations";
 import { formatFare } from "@/features/journey/lib/geo";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -178,15 +179,13 @@ export default function RentalsBrowsePage() {
             <Link
               key={vehicle.id}
               href={`/rentals/${encodeURIComponent(vehicle.id)}?${detailQuery}`}
-              className="flex flex-col rounded-lg border border-border bg-card p-5 shadow-sm transition-colors hover:border-secondary/40"
+              className="flex flex-col rounded-lg border border-border bg-card p-5 shadow-sm transition-all duration-200 hover:border-secondary/40 hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-2">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-secondary">
                   <Car className="size-5" />
                 </span>
-                <span className="rounded-full bg-muted px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                  {VEHICLE_CATEGORY_LABEL[vehicle.category]}
-                </span>
+                <Badge variant="neutral">{VEHICLE_CATEGORY_LABEL[vehicle.category]}</Badge>
               </div>
               <h3 className="mt-3 font-display text-lg font-semibold text-foreground">
                 {vehicle.brand} {vehicle.model}

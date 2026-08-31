@@ -236,8 +236,8 @@ export default function RentalOwnerVehiclesPage() {
           <article key={vehicle.id} className="rounded-lg border border-border bg-card p-5 shadow-sm">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="flex items-start gap-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-secondary">
-                  <Car className="size-5" />
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+                  <Car className="size-4" />
                 </span>
                 <div>
                   <h3 className="font-display text-base font-semibold text-foreground">
