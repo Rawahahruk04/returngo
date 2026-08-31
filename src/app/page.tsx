@@ -99,7 +99,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:px-8">
+      <section className="relative mx-auto max-w-6xl overflow-hidden px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: 50–55% */}
           <div className="flex flex-col items-start gap-6 lg:col-span-7">

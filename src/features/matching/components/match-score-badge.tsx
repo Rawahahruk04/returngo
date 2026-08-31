@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
 function scoreTone(score: number): string {
-  if (score >= 80) return "text-success border-success/40 bg-success/8";
+  if (score >= 80) return "text-success-text border-success/40 bg-success/8";
   if (score >= 60) return "text-info border-info/40 bg-info/8";
-  if (score >= 40) return "text-warning border-warning/40 bg-warning/8";
+  if (score >= 40) return "text-warning-text border-warning/40 bg-warning/8";
   return "text-muted-foreground border-border bg-muted";
 }
 

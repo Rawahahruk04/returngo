@@ -101,7 +101,7 @@ export function ReturnOpportunityPanel({
               <div className="text-right">
                 <p className="font-mono text-sm font-semibold tabular-nums text-foreground">{formatTime12h(cluster.requestedTime)}</p>
                 {result.estimatedSavingsRupees > 0 && (
-                  <p className="font-mono text-xs text-success">saves {formatFare(result.estimatedSavingsRupees)}</p>
+                  <p className="font-mono text-xs text-success-text">saves {formatFare(result.estimatedSavingsRupees)}</p>
                 )}
               </div>
             </div>
@@ -134,7 +134,7 @@ function SummaryStat({ label, value, emphasis }: { label: string; value: string;
   return (
     <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
       <dt className="font-mono text-[10.5px] font-medium uppercase tracking-wide text-muted-foreground">{label}</dt>
-      <dd className={emphasis ? "mt-1 font-mono text-lg font-semibold tabular-nums text-success" : "mt-1 font-mono text-lg font-semibold tabular-nums text-foreground"}>
+      <dd className={emphasis ? "mt-1 font-mono text-lg font-semibold tabular-nums text-success-text" : "mt-1 font-mono text-lg font-semibold tabular-nums text-foreground"}>
         {value}
       </dd>
     </div>

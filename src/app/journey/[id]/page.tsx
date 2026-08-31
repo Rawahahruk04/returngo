@@ -112,7 +112,7 @@ export default async function JourneyDetailsPage({
             <p className="flex items-center justify-end gap-1 font-mono text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
               <Wallet className="size-3" /> Shared savings
             </p>
-            <p className="mt-1 font-mono text-lg font-semibold tabular-nums text-success">
+            <p className="mt-1 font-mono text-lg font-semibold tabular-nums text-success-text">
               {formatFare(match.estimatedSavings)}
             </p>
           </div>

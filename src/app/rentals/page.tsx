@@ -56,10 +56,12 @@ export default function RentalsBrowsePage() {
 
       <div className="mt-8 grid gap-4 rounded-lg border border-border bg-card p-5 shadow-sm sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <Label className="mb-2 block">Vehicle type</Label>
+          <Label htmlFor="rentals-filter-category" className="mb-2 block">
+            Vehicle type
+          </Label>
           <Select value={category} onValueChange={(v) => setCategory(v as VehicleCategory | "all")}>
-            <SelectTrigger>
-              <SelectValue />
+            <SelectTrigger id="rentals-filter-category">
+              <SelectValue placeholder="All types" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All types</SelectItem>
@@ -73,10 +75,12 @@ export default function RentalsBrowsePage() {
         </div>
 
         <div>
-          <Label className="mb-2 block">Transmission</Label>
+          <Label htmlFor="rentals-filter-transmission" className="mb-2 block">
+            Transmission
+          </Label>
           <Select value={transmission} onValueChange={(v) => setTransmission(v as RentalTransmission | "all")}>
-            <SelectTrigger>
-              <SelectValue />
+            <SelectTrigger id="rentals-filter-transmission">
+              <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Any</SelectItem>
@@ -90,10 +94,12 @@ export default function RentalsBrowsePage() {
         </div>
 
         <div>
-          <Label className="mb-2 block">Fuel</Label>
+          <Label htmlFor="rentals-filter-fuel" className="mb-2 block">
+            Fuel
+          </Label>
           <Select value={fuel} onValueChange={(v) => setFuel(v as RentalFuel | "all")}>
-            <SelectTrigger>
-              <SelectValue />
+            <SelectTrigger id="rentals-filter-fuel">
+              <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Any</SelectItem>
@@ -107,10 +113,12 @@ export default function RentalsBrowsePage() {
         </div>
 
         <div>
-          <Label className="mb-2 block">Pickup location</Label>
+          <Label htmlFor="rentals-filter-location" className="mb-2 block">
+            Pickup location
+          </Label>
           <Select value={locationId} onValueChange={setLocationId}>
-            <SelectTrigger>
-              <SelectValue />
+            <SelectTrigger id="rentals-filter-location">
+              <SelectValue placeholder="Anywhere" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Anywhere</SelectItem>
@@ -192,17 +200,17 @@ export default function RentalsBrowsePage() {
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">{location?.name}</p>
 
-              <dl className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-1">
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-4 text-xs text-muted-foreground">
+                <span className="flex items-center gap-1">
                   <Users className="size-3.5" /> {vehicle.seats}
-                </div>
-                <div className="flex items-center gap-1">
+                </span>
+                <span className="flex items-center gap-1">
                   <Fuel className="size-3.5" /> {FUEL_LABEL[vehicle.fuel]}
-                </div>
-                <div className="flex items-center gap-1">
+                </span>
+                <span className="flex items-center gap-1">
                   <Gauge className="size-3.5" /> {TRANSMISSION_LABEL[vehicle.transmission]}
-                </div>
-              </dl>
+                </span>
+              </div>
 
               <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
                 <p className="font-mono text-base font-semibold tabular-nums text-foreground">

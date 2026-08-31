@@ -27,21 +27,21 @@ export default function ContactPage() {
       </p>
 
       <div className="mt-10 grid gap-10 sm:grid-cols-[1fr_1.4fr]">
-        <dl className="flex flex-col gap-6">
+        <ul className="flex flex-col gap-6">
           {CONTACT_POINTS.map((point) => (
-            <div key={point.label} className="flex items-start gap-3">
+            <li key={point.label} className="flex items-start gap-3">
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary/10 text-secondary">
                 <point.icon className="size-4" />
               </span>
               <div>
-                <dt className="font-mono text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                <p className="font-mono text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                   {point.label}
-                </dt>
-                <dd className="mt-0.5 text-sm font-medium text-foreground">{point.value}</dd>
+                </p>
+                <p className="mt-0.5 text-sm font-medium text-foreground">{point.value}</p>
               </div>
-            </div>
+            </li>
           ))}
-        </dl>
+        </ul>
 
         <form
           action="mailto:hello@returngo.in"

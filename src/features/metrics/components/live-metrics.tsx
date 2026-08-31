@@ -5,7 +5,7 @@ import { useRentalCatalog } from "@/features/rental/data/catalog-store";
 import { useRentalBookings } from "@/features/rental/data/booking-store";
 import { usePassengerStore } from "@/features/passenger/data/store";
 import { useFleetStore } from "@/features/fleet/data/store";
-import { Activity, Car, CheckCircle2, Route as RouteIcon, Users } from "lucide-react";
+import { Car, CheckCircle2, Route as RouteIcon, Users } from "lucide-react";
 
 export function LivePlatformMetrics() {
   const { journeys, reservations } = useDriverStore();

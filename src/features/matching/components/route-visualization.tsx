@@ -68,7 +68,7 @@ export function RouteVisualization({ route, category }: { route: RoutePoint[]; c
               {point.name}
             </span>
             {point.role === "pickup" && (
-              <span className="font-mono text-[9.5px] uppercase tracking-wide text-warning">pickup</span>
+              <span className="font-mono text-[9.5px] uppercase tracking-wide text-warning-text">pickup</span>
             )}
           </div>
         ))}

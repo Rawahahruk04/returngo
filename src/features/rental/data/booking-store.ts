@@ -39,8 +39,14 @@ function subscribe(listener: () => void) {
 function getSnapshot() {
   return bookings;
 }
+// A stable, module-level reference — useSyncExternalStore requires
+// getServerSnapshot to return a cached value; a fresh `[]` literal on
+// every call reads as "changed" and triggers React's infinite-loop
+// warning (surfaced once this store started being read from a
+// server-rendered page instead of only client-gated ones).
+const EMPTY_BOOKINGS: RentalBooking[] = [];
 function getServerSnapshot() {
-  return [] as RentalBooking[];
+  return EMPTY_BOOKINGS;
 }
 
 let idCounter = 0;

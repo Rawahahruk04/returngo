@@ -158,7 +158,7 @@ export function JourneyPlannerForm() {
                         <Icon className={cn("size-5", checked ? "text-secondary" : "text-muted-foreground")} />
                         <span className="font-display text-base font-semibold text-foreground">{option.title}</span>
                         {option.value === "share" && (
-                          <span className="ml-auto rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success">
+                          <span className="ml-auto rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success-text">
                             Save money
                           </span>
                         )}

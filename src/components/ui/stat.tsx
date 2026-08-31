@@ -36,7 +36,7 @@ export function Stat({
         className={cn(
           "mt-1 text-sm font-semibold",
           mono ? "font-mono tabular-nums" : "font-medium",
-          emphasis ? "text-success" : "text-foreground",
+          emphasis ? "text-success-text" : "text-foreground",
         )}
       >
         {value}

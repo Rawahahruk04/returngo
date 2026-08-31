@@ -81,7 +81,8 @@ function ProfileForm({ account, vehicleProfile }: { account: Account; vehiclePro
             htmlFor="driver-photo"
             className="absolute -bottom-1 -right-1 flex size-6 cursor-pointer items-center justify-center rounded-full border border-border bg-surface text-muted-foreground shadow-sm hover:text-foreground"
           >
-            <Camera className="size-3.5" />
+            <Camera className="size-3.5" aria-hidden="true" />
+            <span className="sr-only">Upload driver photo</span>
             <input id="driver-photo" type="file" accept="image/*" className="sr-only" onChange={handlePhoto} />
           </label>
         </div>
