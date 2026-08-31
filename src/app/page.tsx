@@ -7,7 +7,6 @@ import {
   ChevronRight,
   Route as RouteIcon,
   ShieldCheck,
-  Sparkles,
   Users,
 } from "lucide-react";
 
@@ -27,7 +26,6 @@ const WHY_RETURANGO = [
     ],
     href: "/plan",
     cta: "Book a taxi",
-    highlight: false,
   },
   {
     emoji: "🚗",
@@ -43,7 +41,6 @@ const WHY_RETURANGO = [
     ],
     href: "/rentals",
     cta: "Explore rentals",
-    highlight: false,
   },
   {
     emoji: "👨‍✈️",
@@ -57,7 +54,6 @@ const WHY_RETURANGO = [
     ],
     href: "/driver",
     cta: "Start driving",
-    highlight: false,
   },
   {
     emoji: "🛡️",
@@ -72,7 +68,6 @@ const WHY_RETURANGO = [
     ],
     href: "/about",
     cta: "How verification works",
-    highlight: true,
   },
 ];
 
@@ -179,56 +174,43 @@ export default function Home() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {WHY_RETURANGO.map((card) => {
-            return (
-              <div
-                key={card.title}
-                className={`flex flex-col justify-between rounded-xl border p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
-                  card.highlight
-                    ? "border-secondary/30 bg-secondary/[0.03] hover:border-secondary/60"
-                    : "border-border bg-card hover:border-border/80"
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl" role="img" aria-label={card.title}>
-                      {card.emoji}
-                    </span>
-                    {card.highlight && (
-                      <span className="inline-flex items-center gap-1 rounded bg-secondary/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase text-secondary">
-                        <Sparkles className="size-3" /> Core Promise
-                      </span>
-                    )}
-                  </div>
+          {WHY_RETURANGO.map((card) => (
+            <div
+              key={card.title}
+              className="flex flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-secondary/30 hover:shadow-md"
+            >
+              <div>
+                <span className="text-2xl" role="img" aria-label={card.title}>
+                  {card.emoji}
+                </span>
 
-                  <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
-                    {card.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {card.description}
-                  </p>
+                <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
+                  {card.title}
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {card.description}
+                </p>
 
-                  <ul className="mt-5 space-y-2.5">
-                    {card.points.map((point) => (
-                      <li key={point} className="flex items-start gap-2 text-xs text-foreground/90">
-                        <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-secondary" />
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-border/60">
-                  <Link
-                    href={card.href}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-secondary hover:underline"
-                  >
-                    {card.cta} <ChevronRight className="size-3" />
-                  </Link>
-                </div>
+                <ul className="mt-5 space-y-2.5">
+                  {card.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2 text-xs text-foreground/90">
+                      <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-secondary" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            );
-          })}
+
+              <div className="mt-6 border-t border-border/60 pt-4">
+                <Link
+                  href={card.href}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-secondary hover:underline"
+                >
+                  {card.cta} <ChevronRight className="size-3" />
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
