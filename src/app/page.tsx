@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -103,31 +104,58 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
-        <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 font-mono text-xs font-semibold text-secondary">
-          <RouteIcon className="size-3.5" /> Regional Mobility Corridor &middot; Coastal Karnataka
-        </div>
-        
-        <h1 className="max-w-3xl font-display text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-          One Platform for Taxi, Vehicle Rentals and Return Journeys.
-        </h1>
-        
-        <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Book an entire taxi or share seats, rent cars and bikes, or monetize empty return legs across Coastal Karnataka.
-        </p>
+      <section className="relative mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
+          {/* Left Column: 50–55% */}
+          <div className="flex flex-col items-start gap-6 lg:col-span-7">
+            <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 font-mono text-xs font-semibold text-secondary">
+              <RouteIcon className="size-3.5" /> Regional Mobility Corridor &middot; Coastal Karnataka
+            </div>
+            
+            <h1 className="max-w-2xl font-display text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+              One Platform for Taxi, Vehicle Rentals and Return Journeys.
+            </h1>
+            
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Book an entire taxi or share seats, rent cars and bikes, or monetize empty return legs across Coastal Karnataka.
+            </p>
 
-        <div className="flex flex-wrap items-center gap-3 pt-2">
-          <Button asChild size="lg" className="h-11 px-6 shadow-sm">
-            <Link href="/plan">
-              Book Taxi <ArrowRight className="ml-1.5 size-4" />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="h-11 px-6">
-            <Link href="/rentals">Rent Vehicles</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg" className="h-11 px-6">
-            <Link href="/driver">Drive &amp; Earn</Link>
-          </Button>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Button asChild size="lg" className="h-11 px-6 shadow-sm">
+                <Link href="/plan">
+                  Book Taxi <ArrowRight className="ml-1.5 size-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-11 px-6">
+                <Link href="/rentals">Rent Vehicles</Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="h-11 px-6">
+                <Link href="/driver">Drive &amp; Earn</Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Column: 45–50% */}
+          <div className="relative flex items-center justify-center lg:col-span-5">
+            {/* Soft radial glow (#F8F8F8) behind image */}
+            <div
+              className="pointer-events-none absolute -inset-6 -z-10 rounded-full opacity-90 blur-3xl"
+              style={{
+                background: "radial-gradient(circle, #F8F8F8 0%, rgba(248, 248, 248, 0.4) 60%, transparent 80%)",
+              }}
+              aria-hidden="true"
+            />
+            <div className="relative w-full max-w-[520px] animate-subtle-float">
+              <Image
+                src="/hero-illustration.jpg"
+                alt="ReturnGo vehicle driving along Coastal Karnataka coastal route"
+                width={1024}
+                height={853}
+                priority
+                className="h-auto w-full object-contain rounded-2xl select-none"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
