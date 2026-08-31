@@ -1,34 +1,77 @@
 import Link from "next/link";
-import { ArrowRight, Car, Fuel, Quote, Route as RouteIcon, ShieldCheck, Sparkles, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Car,
+  CheckCircle2,
+  ChevronRight,
+  Route as RouteIcon,
+  ShieldCheck,
+  Sparkles,
+  Users,
+} from "lucide-react";
 
-import { locations } from "@/features/journey/data/locations";
-import { formatFare } from "@/features/journey/lib/geo";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { RatingStars } from "@/components/ui/rating-stars";
-import { getInitials } from "@/lib/utils";
+import { LivePlatformMetrics } from "@/features/metrics/components/live-metrics";
 
-const PRODUCTS = [
+const WHY_RETURANGO = [
   {
+    emoji: "🚖",
     icon: Users,
     title: "Book Taxi",
-    items: ["Airport", "Hospital", "Intercity", "Local"],
+    description: "Point-to-point and regional rides tailored to your schedule.",
+    points: [
+      "Book an entire taxi",
+      "Share available seats",
+      "Airport, Hospital, Intercity and Local travel",
+    ],
     href: "/plan",
     cta: "Book a taxi",
+    highlight: false,
   },
   {
+    emoji: "🚗",
     icon: Car,
-    title: "Rent Vehicle",
-    items: ["Bike", "Car", "SUV", "Traveller", "Luxury"],
+    title: "Rent Vehicles",
+    description: "Diverse fleet ready for flexible personal or business trips.",
+    points: [
+      "Cars",
+      "Bikes",
+      "SUVs",
+      "Self-drive or with driver (chosen after selecting a vehicle)",
+      "Daily and hourly rentals",
+    ],
     href: "/rentals",
-    cta: "Rent a vehicle",
+    cta: "Explore rentals",
+    highlight: false,
   },
   {
+    emoji: "👨‍✈️",
     icon: RouteIcon,
     title: "Drive & Earn",
-    items: ["Publish Return Journey", "Receive Passenger Matches", "Earn on Empty Trips"],
+    description: "Turn empty return legs into predictable revenue.",
+    points: [
+      "Publish return journeys",
+      "Accept passenger requests",
+      "Earn from empty seats",
+    ],
     href: "/driver",
     cta: "Start driving",
+    highlight: false,
+  },
+  {
+    emoji: "🛡️",
+    icon: ShieldCheck,
+    title: "Safe & Verified",
+    description: "Trust and transparency built into every single trip.",
+    points: [
+      "Verified drivers",
+      "Verified rental owners",
+      "Transparent pricing",
+      "Secure booking flow",
+    ],
+    href: "/about",
+    cta: "How verification works",
+    highlight: true,
   },
 ];
 
@@ -37,236 +80,209 @@ const STEPS = [
     label: "Publish",
     title: "A driver publishes a journey",
     description:
-      "Origin, destination, seats, and a vehicle ReturnGo can verify — takes under a minute in the Driver Workspace.",
+      "Origin, destination, available seats, and vehicle details — submitted in under a minute via the Driver Workspace.",
     href: "/driver/publish",
   },
   {
     label: "Match",
-    title: "The Match Engine ranks the region",
+    title: "The Match Engine scores the route",
     description:
-      "Every empty return leg, shared departure, and nearby flexible journey — scored and explained, never a black box.",
+      "Empty return legs and scheduled departures are paired with passenger requests with transparent criteria and explainable scores.",
     href: "/matches/engine?from=bhatkal&to=mangalore-airport&date=&time=07%3A00&passengers=1&type=airport",
   },
   {
     label: "Travel together",
-    title: "A passenger reserves the seat",
-    description: `Fixed fare, verified driver, and a saving shown up front — the Bhatkal → Mangalore Airport return leg saves ${formatFare(450)} on its own.`,
+    title: "Passengers reserve & ride",
+    description:
+      "Instant confirmation, upfront transparent pricing, and verified driver credentials before departure.",
     href: "/plan",
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    quote:
-      "I used to drive back from Mangalore Airport empty almost every morning. Now that leg pays for itself before I've even left the parking lot.",
-    name: "Mohammed Ashfaq",
-    role: "Driver, Bhatkal",
-  },
-  {
-    quote:
-      "Booked a return-leg seat to the airport for a third of what a direct taxi would've cost — same driver, same comfort, just smarter timing.",
-    name: "Anjali Rao",
-    role: "Passenger, Udupi",
-  },
-  {
-    quote:
-      "Listing my SUV took five minutes and it's already been booked three times this month. The dashboard makes it easy to see what's earning.",
-    name: "Suresh Kulal",
-    role: "Rental Owner, Mangalore",
-  },
-];
-
-const TRUST_POINTS = [
-  {
-    icon: ShieldCheck,
-    title: "Verified drivers, every time",
-    description: "Licence, registration, and photo ID reviewed before a journey is published — shown on every match.",
-  },
-  {
-    icon: Sparkles,
-    title: "Explainable, not a black box",
-    description: "Every match carries a match score and a plain-language reason — \"why am I seeing this?\" answered inline.",
-  },
-  {
-    icon: Fuel,
-    title: "Regional impact, made visible",
-    description: "Fuel saved, empty kilometres prevented, and community impact — surfaced on every return match.",
   },
 ];
 
 export default function Home() {
   return (
     <>
-      <section className="mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 pb-16 pt-20 sm:px-6 sm:pt-28 lg:px-8">
-        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium uppercase tracking-widest text-secondary">
-          <RouteIcon className="size-3.5" /> Regional mobility, Coastal Karnataka
-        </span>
-        <h1 className="max-w-2xl font-display text-4xl font-semibold leading-[1.05] text-foreground md:text-5xl lg:text-6xl">
+      {/* Hero Section */}
+      <section className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-secondary/20 bg-secondary/10 px-3 py-1 font-mono text-xs font-semibold text-secondary">
+          <RouteIcon className="size-3.5" /> Regional Mobility Corridor &middot; Coastal Karnataka
+        </div>
+        
+        <h1 className="max-w-3xl font-display text-4xl font-bold leading-[1.08] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
           One Platform for Taxi, Vehicle Rentals and Return Journeys.
         </h1>
-        <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
-          Book a taxi. Rent a vehicle. Or earn money from your empty return trips across Coastal Karnataka.
+        
+        <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Book an entire taxi or share seats, rent cars and bikes, or monetize empty return legs across Coastal Karnataka.
         </p>
-        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-          <Button asChild size="lg">
+
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <Button asChild size="lg" className="h-11 px-6 shadow-sm">
             <Link href="/plan">
-              Book Taxi <ArrowRight />
+              Book Taxi <ArrowRight className="ml-1.5 size-4" />
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          <Button asChild variant="outline" size="lg" className="h-11 px-6">
+            <Link href="/rentals">Rent Vehicles</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="h-11 px-6">
             <Link href="/driver">Drive &amp; Earn</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/rentals">Rent Vehicle</Link>
-          </Button>
         </div>
       </section>
 
-      <section className="border-y border-border bg-surface-muted">
-        <dl className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-4 py-10 sm:grid-cols-3 sm:px-6 lg:px-8">
-          <StripStat value={String(locations.length)} label="Towns, airports & hospitals on one corridor" />
-          <StripStat value="5" label="Ranked match tiers, always explained" />
-          <StripStat value={formatFare(450)} label="Typical saving on a matched return leg" />
-        </dl>
-      </section>
+      {/* Real-time MVP Platform Activity (Calculated purely from stores) */}
+      <LivePlatformMetrics />
 
-      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">One network, three products</h2>
-        <p className="mt-2 max-w-lg text-muted-foreground">
-          Taxi booking, vehicle rental, and the driver side each stand on their own — pick whichever fits what you
-          need right now.
-        </p>
-
-        <div className="mt-10 grid gap-8 sm:grid-cols-3">
-          {PRODUCTS.map((product) => (
-            <Link
-              key={product.title}
-              href={product.href}
-              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-secondary/40 hover:shadow-md"
-            >
-              <span className="flex size-10 items-center justify-center rounded-full bg-secondary/10 text-secondary">
-                <product.icon className="size-5" />
-              </span>
-              <h3 className="mt-4 font-display text-lg font-semibold text-foreground">{product.title}</h3>
-              <ul className="mt-3 flex-1 space-y-1.5">
-                {product.items.map((item) => (
-                  <li key={item} className="text-sm text-muted-foreground">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                {product.cta} <ArrowRight className="size-3.5" />
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">How ReturnGo works</h2>
-        <p className="mt-2 max-w-lg text-muted-foreground">
-          One coordination loop connects both sides of the network — no separate systems for drivers and
-          passengers.
-        </p>
-
-        <ol className="mt-10 grid gap-8 sm:grid-cols-3">
-          {STEPS.map((step, index) => (
-            <li key={step.label} className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-sm transition-shadow duration-200 hover:shadow-md">
-              <span className="font-mono text-xs font-semibold uppercase tracking-widest text-secondary">
-                {String(index + 1).padStart(2, "0")} &middot; {step.label}
-              </span>
-              <h3 className="mt-3 font-display text-lg font-semibold text-foreground">{step.title}</h3>
-              <p className="mt-2 flex-1 text-sm text-muted-foreground">{step.description}</p>
-              <Link
-                href={step.href}
-                className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary hover:underline"
-              >
-                See it in action <ArrowRight className="size-3.5" />
-              </Link>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="border-t border-border bg-surface-muted">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-          <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">Built for trust</h2>
-          <p className="mt-2 max-w-lg text-muted-foreground">
-            Coordination only works if both sides believe the numbers. Every screen shows its work.
+      {/* Why ReturnGo Section */}
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
+          <div>
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-secondary">
+              Core Services &amp; Standards
+            </span>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Why ReturnGo
+            </h2>
+          </div>
+          <p className="max-w-md text-sm text-muted-foreground">
+            A cohesive regional mobility stack built for passengers, commercial drivers, vehicle owners, and operators.
           </p>
+        </div>
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-3">
-            {TRUST_POINTS.map((point) => (
-              <div key={point.title} className="rounded-lg border border-border bg-card p-6 shadow-sm">
-                <span className="flex size-10 items-center justify-center rounded-full bg-secondary/10 text-secondary">
-                  <point.icon className="size-5" />
-                </span>
-                <h3 className="mt-4 font-display text-base font-semibold text-foreground">{point.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{point.description}</p>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {WHY_RETURANGO.map((card) => {
+            return (
+              <div
+                key={card.title}
+                className={`flex flex-col justify-between rounded-xl border p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md ${
+                  card.highlight
+                    ? "border-secondary/30 bg-secondary/[0.03] hover:border-secondary/60"
+                    : "border-border bg-card hover:border-border/80"
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl" role="img" aria-label={card.title}>
+                      {card.emoji}
+                    </span>
+                    {card.highlight && (
+                      <span className="inline-flex items-center gap-1 rounded bg-secondary/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase text-secondary">
+                        <Sparkles className="size-3" /> Core Promise
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {card.description}
+                  </p>
+
+                  <ul className="mt-5 space-y-2.5">
+                    {card.points.map((point) => (
+                      <li key={point} className="flex items-start gap-2 text-xs text-foreground/90">
+                        <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-secondary" />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-border/60">
+                  <Link
+                    href={card.href}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-secondary hover:underline"
+                  >
+                    {card.cta} <ChevronRight className="size-3" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* How ReturnGo Works */}
+      <section className="border-t border-border bg-surface-muted/60 py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <span className="font-mono text-xs font-semibold uppercase tracking-wider text-secondary">
+              Operational Workflow
+            </span>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              How ReturnGo works
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Direct coordination connects empty return legs with waiting travelers — cutting down waste without complex intermediaries.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+            {STEPS.map((step, index) => (
+              <div
+                key={step.label}
+                className="flex flex-col justify-between rounded-xl border border-border bg-card p-6 shadow-sm transition-all duration-200 hover:shadow-md"
+              >
+                <div>
+                  <span className="font-mono text-xs font-bold uppercase tracking-widest text-secondary">
+                    {String(index + 1).padStart(2, "0")} &middot; {step.label}
+                  </span>
+                  <h3 className="mt-3 font-display text-lg font-semibold text-foreground">
+                    {step.title}
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                    {step.description}
+                  </p>
+                </div>
+                <div className="mt-5 pt-3">
+                  <Link
+                    href={step.href}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-secondary hover:underline"
+                  >
+                    View workflow <ChevronRight className="size-3" />
+                  </Link>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-24 sm:px-6 lg:px-8">
-        <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">From the network</h2>
-        <p className="mt-2 max-w-lg text-muted-foreground">Drivers, passengers, and rental owners already coordinating smarter trips.</p>
+      {/* Final Action CTA */}
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-border bg-card p-8 sm:p-12 shadow-sm">
+          <div className="max-w-2xl">
+            <span className="font-mono text-xs font-semibold uppercase tracking-widest text-secondary">
+              Get Started
+            </span>
+            <h2 className="mt-3 font-display text-2xl font-bold text-foreground sm:text-3xl">
+              Ready to travel, rent, or drive?
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Select your role or choose a service to experience Coastal Karnataka&apos;s return-mobility network.
+            </p>
+          </div>
 
-        <div className="mt-10 grid gap-8 sm:grid-cols-3">
-          {TESTIMONIALS.map((testimonial) => (
-            <figure
-              key={testimonial.name}
-              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-sm transition-shadow duration-200 hover:shadow-md"
-            >
-              <Quote className="size-5 text-secondary/40" aria-hidden="true" />
-              <blockquote className="mt-3 flex-1 text-sm text-foreground/90">&ldquo;{testimonial.quote}&rdquo;</blockquote>
-              <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-4">
-                <Avatar className="size-9">
-                  <AvatarFallback>{getInitials(testimonial.name)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">{testimonial.name}</p>
-                  <p className="text-xs text-muted-foreground">{testimonial.role}</p>
-                </div>
-                <RatingStars rating={5} />
-              </figcaption>
-            </figure>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-24 sm:px-6 lg:px-8">
-        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium uppercase tracking-widest text-secondary">
-          <Users className="size-3.5" /> Wherever you&apos;re starting from
-        </span>
-        <h2 className="max-w-xl font-display text-2xl font-semibold text-foreground sm:text-3xl">
-          Book a taxi, rent a vehicle, or start driving.
-        </h2>
-        <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-          <Button asChild size="lg">
-            <Link href="/plan">
-              Book Taxi <ArrowRight />
-            </Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/rentals">Rent Vehicle</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/driver">Drive &amp; Earn</Link>
-          </Button>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button asChild size="lg">
+              <Link href="/plan">
+                Book Taxi <ArrowRight className="ml-1.5 size-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/rentals">Rent Vehicles</Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/driver">Drive &amp; Earn</Link>
+            </Button>
+            <Button asChild variant="ghost" size="lg">
+              <Link href="/fleet">Fleet Operators</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </>
-  );
-}
-
-function StripStat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <dt className="font-mono text-3xl font-semibold tabular-nums text-foreground">{value}</dt>
-      <dd className="mt-1 text-sm text-muted-foreground">{label}</dd>
-    </div>
   );
 }
