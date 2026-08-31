@@ -16,7 +16,7 @@ export default function PassengerRequestsPage() {
   const upcoming = journeys.filter((j) => j.status === "upcoming").sort((a, b) => b.createdAt - a.createdAt);
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+    <section className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
       <span className="font-mono text-xs font-medium uppercase tracking-widest text-secondary">Driver Workspace</span>
       <h1 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">Passenger requests</h1>
       <p className="mt-3 max-w-lg text-muted-foreground">

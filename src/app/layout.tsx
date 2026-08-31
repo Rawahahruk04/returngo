@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Mono, Public_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Inter, Manrope } from "next/font/google";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -7,23 +7,22 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import "./globals.css";
 
 /**
- * Three roles, three faces — Fraunces carries anything editorial
- * (route names, fare headlines), Public Sans runs the interface,
- * IBM Plex Mono renders every number that needs to be scanned and
- * compared (fares, ETAs, distances). Self-hosted via next/font so
- * there is zero layout shift and no third-party request on a
- * network that is frequently 3G.
+ * Manrope carries the entire interface — headings and body alike —
+ * per the design system's single-font-family direction. Inter loads
+ * alongside purely as the specified fallback family (Manrope is
+ * self-hosted via next/font so it's essentially never needed).
+ * IBM Plex Mono is unchanged: it's a data/numerals utility font, not
+ * part of the visual redesign's color/type-family scope.
  */
-const fraunces = Fraunces({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-fraunces",
-  weight: "variable",
-  axes: ["opsz"],
+  variable: "--font-manrope",
+  weight: ["400", "500", "600", "700"],
 });
 
-const publicSans = Public_Sans({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-public-sans",
+  variable: "--font-inter",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -46,7 +45,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${publicSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${inter.variable} ${plexMono.variable}`}>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <SiteHeader />
         <main className="flex-1">{children}</main>

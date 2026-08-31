@@ -1,21 +1,44 @@
-/**
- * Rental is a separate product from Book Taxi — no Match Engine, no
- * scoring, just a booking intent captured for the team to follow up on.
- */
+import type { VehicleCategory } from "@/lib/vehicle-categories";
+
+export type RentalTransmission = "manual" | "automatic";
+export type RentalFuel = "petrol" | "diesel" | "cng" | "electric";
 export type RentalMode = "self-drive" | "with-driver";
 
-export type RentalCategory = "hatchback" | "sedan" | "suv" | "traveller";
-
-export type RentalDuration = "few-hours" | "full-day" | "multi-day";
-
-export type RentalInquiry = {
+/**
+ * A listing in the rental marketplace — separate from the Match
+ * Engine entirely. `ownerName` ties a listing back to whichever
+ * Rental Owner account created it; seeded demo listings use a
+ * placeholder owner name so they never collide with a real account.
+ */
+export type RentalVehicle = {
   id: string;
-  mode: RentalMode;
-  category: RentalCategory;
-  duration: RentalDuration;
+  ownerName: string;
+  brand: string;
+  model: string;
+  category: VehicleCategory;
+  transmission: RentalTransmission;
+  fuel: RentalFuel;
+  seats: number;
+  pricePerDay: number;
+  photoDataUrl?: string;
   locationId: string;
-  date: string;
+  /** Whether this listing can be hired with a driver, in addition to self-drive. */
+  driverAvailable: boolean;
+  available: boolean;
+};
+
+export type RentalVehicleInput = Omit<RentalVehicle, "id">;
+
+export type RentalBooking = {
+  id: string;
+  vehicleId: string;
+  renterName: string;
+  mode: RentalMode;
+  pickupDate: string;
+  returnDate: string;
+  locationId: string;
+  totalPrice: number;
   createdAt: number;
 };
 
-export type RentalInquiryInput = Omit<RentalInquiry, "id" | "createdAt">;
+export type RentalBookingInput = Omit<RentalBooking, "id" | "createdAt">;

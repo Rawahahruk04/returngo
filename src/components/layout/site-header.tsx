@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { LogOut } from "lucide-react";
 
 import { primaryNav } from "@/config/nav";
 import { Logomark, Wordmark } from "@/components/brand/logomark";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
-import { useDriverAuth } from "@/features/driver/data/auth-store";
+import { logoutAccount, useAccount } from "@/features/auth/data/account-store";
+import { ROLE_DASHBOARD_PATH } from "@/features/auth/lib/roles";
 
 export function SiteHeader() {
-  const { isAuthenticated } = useDriverAuth();
+  const { account, isAuthenticated } = useAccount();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-sm">
@@ -32,11 +34,25 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button asChild variant="outline" size="sm">
-            <Link href={isAuthenticated ? "/driver" : "/driver/login"}>
-              {isAuthenticated ? "Dashboard" : "Driver Sign In"}
-            </Link>
-          </Button>
+          {isAuthenticated && account ? (
+            <>
+              <Button asChild variant="outline" size="sm">
+                <Link href={ROLE_DASHBOARD_PATH[account.role]}>Dashboard</Link>
+              </Button>
+              <Button variant="ghost" size="icon" aria-label="Sign out" onClick={() => logoutAccount()}>
+                <LogOut />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/register">Register</Link>
+              </Button>
+            </>
+          )}
           <Button asChild size="sm">
             <Link href="/plan">Book Taxi</Link>
           </Button>

@@ -1,19 +1,25 @@
+import type { VehicleCategory } from "@/lib/vehicle-categories";
+
 /** The Driver Workspace's vocabulary — deliberately small, no fleet/revenue/analytics concepts. */
 export type FuelType = "petrol" | "diesel" | "cng" | "electric";
 export type TransmissionType = "manual" | "automatic";
 
 export type DriverVehicle = {
-  name: string;
+  brand: string;
+  model: string;
+  category: VehicleCategory;
   seats: number;
   fuel: FuelType;
   transmission: TransmissionType;
-  ac: boolean;
+  year: number;
 };
 
-/** Set once in the Driver Profile — never re-asked when publishing a journey. */
-export type DriverProfile = {
-  name: string;
-  phone: string;
+/**
+ * Vehicle side of the driver's identity, set once in the Driver
+ * Profile — never re-asked when publishing a journey. Name/phone
+ * live on the shared `Account` instead (see `features/auth`).
+ */
+export type DriverVehicleProfile = {
   vehicleRegistration: string;
   vehicle: DriverVehicle | null;
   verified: boolean;

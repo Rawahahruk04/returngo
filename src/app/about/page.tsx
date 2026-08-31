@@ -59,7 +59,7 @@ export default function AboutPage() {
           <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">Three products, one network</h2>
           <p className="mt-2 max-w-lg text-muted-foreground">Each stands on its own — Rental never mixes into Taxi, and driving is a real product with its own workspace.</p>
 
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="mt-10 grid gap-8 sm:grid-cols-3">
             {PILLARS.map((pillar) => (
               <Link
                 key={pillar.title}

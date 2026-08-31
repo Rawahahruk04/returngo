@@ -3,16 +3,17 @@
 import * as React from "react";
 import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 
 import { primaryNav } from "@/config/nav";
 import { Logomark, Wordmark } from "@/components/brand/logomark";
 import { Button } from "@/components/ui/button";
-import { useDriverAuth } from "@/features/driver/data/auth-store";
+import { logoutAccount, useAccount } from "@/features/auth/data/account-store";
+import { ROLE_DASHBOARD_PATH } from "@/features/auth/lib/roles";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
-  const { isAuthenticated } = useDriverAuth();
+  const { account, isAuthenticated } = useAccount();
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -27,7 +28,7 @@ export function MobileNav() {
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-navy-900/40 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
         <Dialog.Content className="fixed inset-y-0 right-0 z-50 flex h-full w-[86%] max-w-sm flex-col bg-surface p-6 shadow-lg data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right">
           <div className="flex items-center justify-between">
             <Dialog.Title asChild>
@@ -72,11 +73,38 @@ export function MobileNav() {
                 Book Taxi
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href={isAuthenticated ? "/driver" : "/driver/login"} onClick={() => setOpen(false)}>
-                {isAuthenticated ? "Driver Dashboard" : "Sign In"}
-              </Link>
-            </Button>
+            {isAuthenticated && account ? (
+              <>
+                <Button asChild variant="outline" size="lg">
+                  <Link href={ROLE_DASHBOARD_PATH[account.role]} onClick={() => setOpen(false)}>
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="lg"
+                  onClick={() => {
+                    logoutAccount();
+                    setOpen(false);
+                  }}
+                >
+                  <LogOut /> Sign out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button asChild variant="outline" size="lg">
+                  <Link href="/register" onClick={() => setOpen(false)}>
+                    Register
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="lg">
+                  <Link href="/login" onClick={() => setOpen(false)}>
+                    Login
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

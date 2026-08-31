@@ -8,33 +8,37 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { updateDriverProfile, useDriverAuth } from "@/features/driver/data/auth-store";
+import { updateAccount, useAccount } from "@/features/auth/data/account-store";
+import type { Account } from "@/features/auth/types";
+import { updateDriverVehicleProfile, useDriverVehicleProfile } from "@/features/driver/data/vehicle-profile-store";
 import { VehicleSelector } from "@/features/driver/components/vehicle-selector";
 import { WorkspaceNav } from "@/features/driver/components/workspace-nav";
-import type { DriverProfile, DriverVehicle } from "@/features/driver/types";
+import type { DriverVehicle, DriverVehicleProfile } from "@/features/driver/types";
 
 export default function DriverProfilePage() {
-  const { profile } = useDriverAuth();
-  if (!profile) return null;
-  return <ProfileForm profile={profile} />;
+  const { account } = useAccount();
+  const vehicleProfile = useDriverVehicleProfile();
+  if (!account) return null;
+  return <ProfileForm account={account} vehicleProfile={vehicleProfile} />;
 }
 
 /**
  * A separate component (rather than a useEffect syncing local state
- * from `profile`) so react-hook-form-style local state only ever
- * initializes once, on the mount that already has a real profile —
- * the page-level gate above guarantees that.
+ * from the account) so local state only ever initializes once, on
+ * the mount that already has a real account — the page-level gate
+ * above (and the `/driver` RoleGuard) guarantees that.
  */
-function ProfileForm({ profile }: { profile: DriverProfile }) {
-  const [name, setName] = React.useState(profile.name);
-  const [phone, setPhone] = React.useState(profile.phone);
-  const [vehicleRegistration, setVehicleRegistration] = React.useState(profile.vehicleRegistration);
-  const [vehicle, setVehicle] = React.useState<DriverVehicle | null>(profile.vehicle);
+function ProfileForm({ account, vehicleProfile }: { account: Account; vehicleProfile: DriverVehicleProfile }) {
+  const [name, setName] = React.useState(account.name);
+  const [phone, setPhone] = React.useState(account.phone);
+  const [vehicleRegistration, setVehicleRegistration] = React.useState(vehicleProfile.vehicleRegistration);
+  const [vehicle, setVehicle] = React.useState<DriverVehicle | null>(vehicleProfile.vehicle);
   const [saved, setSaved] = React.useState(false);
 
   function handleSave(event: React.FormEvent) {
     event.preventDefault();
-    updateDriverProfile({ name: name.trim(), phone: phone.trim(), vehicleRegistration: vehicleRegistration.trim(), vehicle });
+    updateAccount({ name: name.trim(), phone: phone.trim() });
+    updateDriverVehicleProfile({ vehicleRegistration: vehicleRegistration.trim(), vehicle });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -45,14 +49,14 @@ function ProfileForm({ profile }: { profile: DriverProfile }) {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
-        updateDriverProfile({ photoDataUrl: reader.result });
+        updateDriverVehicleProfile({ photoDataUrl: reader.result });
       }
     };
     reader.readAsDataURL(file);
   }
 
   return (
-    <section className="mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+    <section className="mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
       <span className="font-mono text-xs font-medium uppercase tracking-widest text-secondary">Drive &amp; Earn</span>
       <h1 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">Driver profile</h1>
       <p className="mt-3 max-w-lg text-muted-foreground">
@@ -66,11 +70,11 @@ function ProfileForm({ profile }: { profile: DriverProfile }) {
       <div className="mt-8 flex items-center gap-4 rounded-lg border border-border bg-card p-5 shadow-sm">
         <div className="relative">
           <Avatar className="size-16">
-            {profile.photoDataUrl ? (
+            {vehicleProfile.photoDataUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={profile.photoDataUrl} alt="" className="size-full object-cover" />
+              <img src={vehicleProfile.photoDataUrl} alt="" className="size-full object-cover" />
             ) : (
-              <AvatarFallback>{(profile.name || "?").slice(0, 1).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>{(account.name || "?").slice(0, 1).toUpperCase()}</AvatarFallback>
             )}
           </Avatar>
           <label
@@ -82,17 +86,17 @@ function ProfileForm({ profile }: { profile: DriverProfile }) {
           </label>
         </div>
         <div className="flex-1">
-          <p className="font-display text-lg font-semibold text-foreground">{profile.name || "Unnamed driver"}</p>
-          <Badge variant={profile.verified ? "success" : "warning"} className="mt-1">
-            <BadgeCheck className="size-3" /> {profile.verified ? "Verified" : "Pending verification"}
+          <p className="font-display text-lg font-semibold text-foreground">{account.name || "Unnamed driver"}</p>
+          <Badge variant={vehicleProfile.verified ? "success" : "warning"} className="mt-1">
+            <BadgeCheck className="size-3" /> {vehicleProfile.verified ? "Verified" : "Pending verification"}
           </Badge>
         </div>
-        {!profile.verified && (
+        {!vehicleProfile.verified && (
           <Button
             type="button"
             size="sm"
             variant="outline"
-            onClick={() => updateDriverProfile({ verified: true })}
+            onClick={() => updateDriverVehicleProfile({ verified: true })}
           >
             Mark as verified
           </Button>

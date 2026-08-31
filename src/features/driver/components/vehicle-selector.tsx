@@ -4,18 +4,31 @@ import * as React from "react";
 import { Car, Check, Plus, Search, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { FUEL_LABEL, POPULAR_VEHICLES, TRANSMISSION_LABEL } from "@/features/driver/lib/vehicles";
 import type { DriverVehicle, FuelType, TransmissionType } from "@/features/driver/types";
+import { VEHICLE_CATEGORIES, VEHICLE_CATEGORY_LABEL, type VehicleCategory } from "@/lib/vehicle-categories";
 import { cn } from "@/lib/utils";
 
-const EMPTY_MANUAL: DriverVehicle = { name: "", seats: 4, fuel: "petrol", transmission: "manual", ac: true };
+const CURRENT_YEAR = new Date().getFullYear();
+const EMPTY_MANUAL: DriverVehicle = {
+  brand: "",
+  model: "",
+  category: "sedan",
+  seats: 4,
+  fuel: "petrol",
+  transmission: "manual",
+  year: CURRENT_YEAR,
+};
+
+function displayName(vehicle: DriverVehicle): string {
+  return `${vehicle.brand} ${vehicle.model}`.trim();
+}
 
 /**
- * Replaces the old 4-item vehicle dropdown: a search box over the
+ * Replaces the old vehicle dropdown: a search box over the
  * popular-vehicles catalogue, with a manual "Add my vehicle" fallback
  * for anything not in that list. Used once, in the Driver Profile —
  * publishing a journey never touches this component.
@@ -34,7 +47,7 @@ export function VehicleSelector({
   const results = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return POPULAR_VEHICLES;
-    return POPULAR_VEHICLES.filter((vehicle) => vehicle.name.toLowerCase().includes(q));
+    return POPULAR_VEHICLES.filter((vehicle) => displayName(vehicle).toLowerCase().includes(q));
   }, [query]);
 
   function selectPopular(vehicle: DriverVehicle) {
@@ -42,7 +55,7 @@ export function VehicleSelector({
   }
 
   function submitManual() {
-    if (!manual.name.trim()) return;
+    if (!manual.brand.trim() || !manual.model.trim()) return;
     onChange(manual);
   }
 
@@ -74,11 +87,11 @@ export function VehicleSelector({
       {value && (
         <div className="flex items-center justify-between gap-3 rounded-md border border-secondary/40 bg-secondary/5 px-3.5 py-2.5">
           <p className="flex items-center gap-2 text-sm font-medium text-foreground">
-            <Check className="size-4 text-secondary" /> {value.name}
+            <Check className="size-4 text-secondary" /> {displayName(value)}
           </p>
           <p className="text-xs text-muted-foreground">
-            {value.seats} seats · {FUEL_LABEL[value.fuel]} · {TRANSMISSION_LABEL[value.transmission]}
-            {value.ac ? " · AC" : ""}
+            {VEHICLE_CATEGORY_LABEL[value.category]} · {value.year} · {value.seats} seats · {FUEL_LABEL[value.fuel]} ·{" "}
+            {TRANSMISSION_LABEL[value.transmission]}
           </p>
         </div>
       )}
@@ -101,17 +114,17 @@ export function VehicleSelector({
               </li>
             ) : (
               results.map((vehicle) => (
-                <li key={vehicle.name}>
+                <li key={displayName(vehicle)}>
                   <button
                     type="button"
                     onClick={() => selectPopular(vehicle)}
                     className={cn(
                       "flex w-full items-center justify-between gap-3 border-b border-border px-3.5 py-2.5 text-left text-sm transition-colors last:border-b-0 hover:bg-muted",
-                      value?.name === vehicle.name && "bg-secondary/8",
+                      value && displayName(value) === displayName(vehicle) && "bg-secondary/8",
                     )}
                   >
                     <span className="flex items-center gap-2 font-medium text-foreground">
-                      <Car className="size-4 text-muted-foreground" /> {vehicle.name}
+                      <Car className="size-4 text-muted-foreground" /> {displayName(vehicle)}
                     </span>
                     <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Users className="size-3.5" /> {vehicle.seats}
@@ -124,16 +137,63 @@ export function VehicleSelector({
         </div>
       ) : (
         <div className="flex flex-col gap-4 rounded-md border border-dashed border-border p-4">
-          <div>
-            <Label htmlFor="manual-vehicle-name" className="mb-2 block">
-              Vehicle name
-            </Label>
-            <Input
-              id="manual-vehicle-name"
-              placeholder="e.g. Chevrolet Tavera"
-              value={manual.name}
-              onChange={(event) => setManual((prev) => ({ ...prev, name: event.target.value }))}
-            />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="manual-vehicle-brand" className="mb-2 block">
+                Brand
+              </Label>
+              <Input
+                id="manual-vehicle-brand"
+                placeholder="e.g. Chevrolet"
+                value={manual.brand}
+                onChange={(event) => setManual((prev) => ({ ...prev, brand: event.target.value }))}
+              />
+            </div>
+            <div>
+              <Label htmlFor="manual-vehicle-model" className="mb-2 block">
+                Model
+              </Label>
+              <Input
+                id="manual-vehicle-model"
+                placeholder="e.g. Tavera"
+                value={manual.model}
+                onChange={(event) => setManual((prev) => ({ ...prev, model: event.target.value }))}
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label className="mb-2 block">Vehicle type</Label>
+              <Select
+                value={manual.category}
+                onValueChange={(v) => setManual((prev) => ({ ...prev, category: v as VehicleCategory }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {VEHICLE_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {VEHICLE_CATEGORY_LABEL[category]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="manual-vehicle-year" className="mb-2 block">
+                Year
+              </Label>
+              <Input
+                id="manual-vehicle-year"
+                type="number"
+                min={1990}
+                max={CURRENT_YEAR + 1}
+                value={manual.year}
+                onChange={(event) => setManual((prev) => ({ ...prev, year: Number(event.target.value) || CURRENT_YEAR }))}
+              />
+            </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
@@ -187,15 +247,13 @@ export function VehicleSelector({
             </div>
           </div>
 
-          <label className="flex cursor-pointer items-center gap-3">
-            <Checkbox
-              checked={manual.ac}
-              onChange={(event) => setManual((prev) => ({ ...prev, ac: event.target.checked }))}
-            />
-            <span className="text-sm text-muted-foreground">Air conditioned</span>
-          </label>
-
-          <Button type="button" size="sm" className="self-start" disabled={!manual.name.trim()} onClick={submitManual}>
+          <Button
+            type="button"
+            size="sm"
+            className="self-start"
+            disabled={!manual.brand.trim() || !manual.model.trim()}
+            onClick={submitManual}
+          >
             Use this vehicle
           </Button>
         </div>

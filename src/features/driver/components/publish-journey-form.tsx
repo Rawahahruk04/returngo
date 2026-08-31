@@ -20,7 +20,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SegmentedControl, type SegmentedOption } from "@/components/ui/segmented-control";
-import { useDriverAuth } from "@/features/driver/data/auth-store";
+import { useAccount } from "@/features/auth/data/account-store";
+import { useDriverVehicleProfile } from "@/features/driver/data/vehicle-profile-store";
 import { publishJourney } from "@/features/driver/data/store";
 import { publishJourneySchema, type PublishJourneyFormValues } from "@/features/driver/lib/schema";
 
@@ -36,7 +37,8 @@ function todayISODate(): string {
 
 export function PublishJourneyForm() {
   const router = useRouter();
-  const { profile } = useDriverAuth();
+  const { account } = useAccount();
+  const profile = useDriverVehicleProfile();
   const {
     control,
     register,
@@ -49,13 +51,13 @@ export function PublishJourneyForm() {
       destinationId: "mangalore-airport",
       date: todayISODate(),
       time: "07:00",
-      seatsTotal: profile?.vehicle?.seats ?? 4,
+      seatsTotal: profile.vehicle?.seats ?? 4,
       purpose: "airport",
       price: 900,
     },
   });
 
-  if (!profile?.vehicle || !profile.vehicleRegistration) {
+  if (!account || !profile.vehicle || !profile.vehicleRegistration) {
     return (
       <div className="flex flex-col items-start gap-4 rounded-lg border border-dashed border-border p-6 text-center sm:items-center">
         <UserCog className="size-8 text-secondary" />
@@ -74,11 +76,11 @@ export function PublishJourneyForm() {
   }
 
   function onSubmit(values: PublishJourneyFormValues) {
-    if (!profile?.vehicle) return;
+    if (!account || !profile.vehicle) return;
     const journey = publishJourney({
       ...values,
-      driverName: profile.name,
-      vehicleName: profile.vehicle.name,
+      driverName: account.name,
+      vehicleName: `${profile.vehicle.brand} ${profile.vehicle.model}`,
       vehiclePlate: profile.vehicleRegistration,
     });
     router.push(`/driver/journeys#${journey.id}`);
@@ -88,8 +90,8 @@ export function PublishJourneyForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
       <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-muted px-3.5 py-2.5 text-sm">
         <span className="text-muted-foreground">
-          Driving as <span className="font-medium text-foreground">{profile.name}</span> ·{" "}
-          {profile.vehicle.name} · {profile.vehicleRegistration}
+          Driving as <span className="font-medium text-foreground">{account.name}</span> ·{" "}
+          {profile.vehicle.brand} {profile.vehicle.model} · {profile.vehicleRegistration}
         </span>
         <Link href="/driver/profile" className="shrink-0 font-medium text-secondary hover:underline">
           Change

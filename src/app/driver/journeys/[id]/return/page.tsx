@@ -16,7 +16,7 @@ export default function ReturnOpportunityPage() {
   const journey = journeys.find((j) => j.id === journeyId);
 
   return (
-    <section className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+    <section className="mx-auto max-w-3xl px-4 py-14 sm:px-6 sm:py-24 lg:px-8">
       <Link
         href="/driver/journeys"
         className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"

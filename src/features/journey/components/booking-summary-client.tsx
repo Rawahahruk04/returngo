@@ -10,6 +10,7 @@ import { CheckCircle2, Info, ShieldCheck } from "lucide-react";
 import { getLocation } from "@/features/journey/data/locations";
 import { generateConfirmationCode } from "@/features/journey/lib/confirmation";
 import { formatDuration, formatFare } from "@/features/journey/lib/geo";
+import { addTrip } from "@/features/passenger/data/store";
 import {
   passengerDetailsSchema,
   type PassengerDetailsValues,
@@ -46,7 +47,18 @@ export function BookingSummaryClient({
 
   async function onSubmit(values: PassengerDetailsValues) {
     await new Promise((resolve) => setTimeout(resolve, 500));
-    setConfirmation({ code: generateConfirmationCode(), passengerName: values.name });
+    const code = generateConfirmationCode();
+    addTrip({
+      matchId: match.id,
+      originId: match.originId,
+      destinationId: match.destinationId,
+      driverName: match.driver.name,
+      vehicle: match.driver.vehicle,
+      date: travelDateLabel,
+      fare: match.fare,
+      confirmationCode: code,
+    });
+    setConfirmation({ code, passengerName: values.name });
   }
 
   return (
