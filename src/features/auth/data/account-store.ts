@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 
-import type { Account, RegisterInput } from "@/features/auth/types";
+import type { Account, RegisterInput, UserRole } from "@/features/auth/types";
 
 /**
  * The one signed-in account on this device — `localStorage`-backed,
@@ -68,6 +68,19 @@ function getServerSnapshot() {
 
 export function registerAccount(input: RegisterInput) {
   setAccount({ name: input.name, email: input.email, phone: input.phone, role: input.role });
+}
+
+export function loginAccount(input: { identifier: string; role: UserRole; name?: string; phone?: string; email?: string }) {
+  const isEmail = input.identifier.includes("@");
+  const fallbackName = input.name || (isEmail ? input.identifier.split("@")[0] : `User (${input.identifier.slice(-4)})`);
+  const finalEmail = input.email || (isEmail ? input.identifier : `${input.identifier.replace(/\D/g, "")}@returngo.local`);
+  const finalPhone = input.phone || (isEmail ? "+91 98450 00000" : input.identifier);
+  setAccount({
+    name: fallbackName,
+    email: finalEmail,
+    phone: finalPhone,
+    role: input.role,
+  });
 }
 
 export function logoutAccount() {
