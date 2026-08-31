@@ -3,10 +3,11 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/driver", label: "Overview" },
-  { href: "/driver/publish", label: "Publish journey" },
-  { href: "/driver/journeys", label: "My journeys" },
-  { href: "/driver/requests", label: "Passenger requests" },
+  { href: "/driver", label: "Dashboard" },
+  { href: "/driver/publish", label: "Publish" },
+  { href: "/driver/requests", label: "Requests" },
+  { href: "/driver/journeys", label: "Journeys" },
+  { href: "/driver/profile", label: "Profile" },
 ];
 
 export function WorkspaceNav({ active }: { active: string }) {

@@ -1,9 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { HeartPulse, Plane, Route as RouteIcon, Send } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { HeartPulse, Plane, Route as RouteIcon, Send, UserCog } from "lucide-react";
 
 import { locationGroups, locations } from "@/features/journey/data/locations";
 import { Button } from "@/components/ui/button";
@@ -19,9 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SegmentedControl, type SegmentedOption } from "@/components/ui/segmented-control";
+import { useDriverAuth } from "@/features/driver/data/auth-store";
 import { publishJourney } from "@/features/driver/data/store";
 import { publishJourneySchema, type PublishJourneyFormValues } from "@/features/driver/lib/schema";
-import { VEHICLE_DEFAULT_SEATS, VEHICLE_OPTIONS } from "@/features/driver/lib/vehicles";
 
 const purposeOptions: SegmentedOption[] = [
   { value: "airport", label: "Airport", icon: Plane },
@@ -35,84 +36,64 @@ function todayISODate(): string {
 
 export function PublishJourneyForm() {
   const router = useRouter();
+  const { profile } = useDriverAuth();
   const {
     control,
     register,
     handleSubmit,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<PublishJourneyFormValues>({
     resolver: zodResolver(publishJourneySchema),
     defaultValues: {
-      driverName: "",
-      vehicleType: "innova",
-      vehiclePlate: "",
       originId: "bhatkal",
       destinationId: "mangalore-airport",
       date: todayISODate(),
       time: "07:00",
-      seatsTotal: VEHICLE_DEFAULT_SEATS.innova,
+      seatsTotal: profile?.vehicle?.seats ?? 4,
       purpose: "airport",
+      price: 900,
     },
   });
 
-  const vehicleType = useWatch({ control, name: "vehicleType" });
+  if (!profile?.vehicle || !profile.vehicleRegistration) {
+    return (
+      <div className="flex flex-col items-start gap-4 rounded-lg border border-dashed border-border p-6 text-center sm:items-center">
+        <UserCog className="size-8 text-secondary" />
+        <div>
+          <p className="font-display text-lg font-semibold text-foreground">Complete your driver profile first</p>
+          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+            Add your vehicle and registration once — every journey you publish after that only asks for the trip
+            itself.
+          </p>
+        </div>
+        <Button asChild size="sm">
+          <Link href="/driver/profile">Set up driver profile</Link>
+        </Button>
+      </div>
+    );
+  }
 
   function onSubmit(values: PublishJourneyFormValues) {
-    const journey = publishJourney(values);
+    if (!profile?.vehicle) return;
+    const journey = publishJourney({
+      ...values,
+      driverName: profile.name,
+      vehicleName: profile.vehicle.name,
+      vehiclePlate: profile.vehicleRegistration,
+    });
     router.push(`/driver/journeys#${journey.id}`);
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <div>
-          <Label htmlFor="driverName" className="mb-2 block">
-            Driver name
-          </Label>
-          <Input id="driverName" placeholder="e.g. Mohammed Ashfaq" aria-invalid={Boolean(errors.driverName)} {...register("driverName")} />
-          {errors.driverName && <p className="mt-1.5 text-xs text-destructive">{errors.driverName.message}</p>}
-        </div>
-
-        <div>
-          <Label htmlFor="vehiclePlate" className="mb-2 block">
-            Vehicle registration
-          </Label>
-          <Input id="vehiclePlate" placeholder="e.g. KA-19-B-4021" aria-invalid={Boolean(errors.vehiclePlate)} {...register("vehiclePlate")} />
-          {errors.vehiclePlate && <p className="mt-1.5 text-xs text-destructive">{errors.vehiclePlate.message}</p>}
-        </div>
-      </div>
-
-      <div>
-        <Label className="mb-2 block">Vehicle type</Label>
-        <Controller
-          control={control}
-          name="vehicleType"
-          render={({ field }) => (
-            <Select
-              value={field.value}
-              onValueChange={(value) => {
-                field.onChange(value);
-                setValue("seatsTotal", VEHICLE_DEFAULT_SEATS[value as keyof typeof VEHICLE_DEFAULT_SEATS]);
-              }}
-            >
-              <SelectTrigger id="vehicleType">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {VEHICLE_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        />
-        <p className="mt-1.5 text-xs text-muted-foreground">
-          Suggested seats for {VEHICLE_OPTIONS.find((v) => v.value === vehicleType)?.label}:{" "}
-          {VEHICLE_DEFAULT_SEATS[vehicleType]}
-        </p>
+      <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-surface-muted px-3.5 py-2.5 text-sm">
+        <span className="text-muted-foreground">
+          Driving as <span className="font-medium text-foreground">{profile.name}</span> ·{" "}
+          {profile.vehicle.name} · {profile.vehicleRegistration}
+        </span>
+        <Link href="/driver/profile" className="shrink-0 font-medium text-secondary hover:underline">
+          Change
+        </Link>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
@@ -197,15 +178,39 @@ export function PublishJourneyForm() {
         </div>
       </div>
 
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <Label htmlFor="price" className="mb-2 block">
+            Price (₹, whole journey)
+          </Label>
+          <Input
+            id="price"
+            type="number"
+            min={1}
+            aria-invalid={Boolean(errors.price)}
+            {...register("price", { valueAsNumber: true })}
+          />
+          {errors.price && <p className="mt-1.5 text-xs text-destructive">{errors.price.message}</p>}
+        </div>
+
+        <div>
+          <Label className="mb-3 block">Journey purpose</Label>
+          <Controller
+            control={control}
+            name="purpose"
+            render={({ field }) => (
+              <SegmentedControl name={field.name} options={purposeOptions} value={field.value} onChange={field.onChange} />
+            )}
+          />
+        </div>
+      </div>
+
       <div>
-        <Label className="mb-3 block">Journey purpose</Label>
-        <Controller
-          control={control}
-          name="purpose"
-          render={({ field }) => (
-            <SegmentedControl name={field.name} options={purposeOptions} value={field.value} onChange={field.onChange} />
-          )}
-        />
+        <Label htmlFor="notes" className="mb-2 block">
+          Notes for passengers (optional)
+        </Label>
+        <Input id="notes" placeholder="e.g. Boarding at the NH66 junction, not the bus stand" {...register("notes")} />
+        {errors.notes && <p className="mt-1.5 text-xs text-destructive">{errors.notes.message}</p>}
       </div>
 
       <Button type="submit" size="lg" disabled={isSubmitting} className="mt-2">

@@ -7,7 +7,8 @@ export const journeyPlanSchema = z
     date: z.string().min(1, "Select a travel date"),
     time: z.string().min(1, "Select a preferred time"),
     passengers: z.number().int().min(1).max(4),
-    journeyType: z.enum(["airport", "hospital", "intercity", "rental"]),
+    journeyType: z.enum(["airport", "hospital", "intercity", "local"]),
+    tripType: z.enum(["entire", "share"]),
     flexible: z.boolean(),
   })
   .refine((data) => data.originId !== data.destinationId, {

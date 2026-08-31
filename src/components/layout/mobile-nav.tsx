@@ -5,12 +5,14 @@ import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Menu, X } from "lucide-react";
 
-import { driverNav, passengerNav, type NavItem } from "@/config/nav";
+import { primaryNav } from "@/config/nav";
 import { Logomark, Wordmark } from "@/components/brand/logomark";
 import { Button } from "@/components/ui/button";
+import { useDriverAuth } from "@/features/driver/data/auth-store";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
+  const { isAuthenticated } = useDriverAuth();
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -35,7 +37,7 @@ export function MobileNav() {
               </Link>
             </Dialog.Title>
             <Dialog.Description className="sr-only">
-              Browse ReturnGo passenger and driver navigation links.
+              Browse ReturnGo&apos;s navigation links.
             </Dialog.Description>
             <Dialog.Close asChild>
               <Button variant="ghost" size="icon" aria-label="Close menu">
@@ -44,56 +46,40 @@ export function MobileNav() {
             </Dialog.Close>
           </div>
 
-          <nav className="mt-10 flex flex-1 flex-col gap-8">
-            <NavGroup title="Passenger" items={passengerNav} onNavigate={() => setOpen(false)} />
-            <NavGroup title="Driver" items={driverNav} onNavigate={() => setOpen(false)} />
+          <nav className="mt-10 flex flex-1 flex-col gap-1">
+            <Link
+              href="/"
+              onClick={() => setOpen(false)}
+              className="rounded-md px-2 py-3 font-display text-xl font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              Home
+            </Link>
+            {primaryNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="rounded-md px-2 py-3 font-display text-xl font-medium text-foreground transition-colors hover:bg-muted"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="flex flex-col gap-3 border-t border-border pt-6">
             <Button asChild size="lg">
               <Link href="/plan" onClick={() => setOpen(false)}>
-                Plan a journey
+                Book Taxi
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/driver/publish" onClick={() => setOpen(false)}>
-                Publish a journey
+              <Link href={isAuthenticated ? "/driver" : "/driver/login"} onClick={() => setOpen(false)}>
+                {isAuthenticated ? "Driver Dashboard" : "Sign In"}
               </Link>
             </Button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
-  );
-}
-
-function NavGroup({
-  title,
-  items,
-  onNavigate,
-}: {
-  title: string;
-  items: NavItem[];
-  onNavigate: () => void;
-}) {
-  return (
-    <div>
-      <p className="mb-3 font-mono text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-        {title}
-      </p>
-      <ul className="flex flex-col gap-4">
-        {items.map((item) => (
-          <li key={item.href}>
-            <Link
-              href={item.href}
-              onClick={onNavigate}
-              className="block font-display text-xl font-medium text-foreground"
-            >
-              {item.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

@@ -5,58 +5,64 @@ export type NavItem = {
 };
 
 /**
- * Primary wayfinding for the two sides of the network. Passenger
- * and driver surfaces are deliberately listed separately in the
- * mobile nav (see MobileNav) so a driver never has to wade through
- * passenger-facing labels to find their dashboard, and vice versa.
+ * Primary wayfinding across ReturnGo's three products — Book Taxi,
+ * Rent Vehicle, and Drive & Earn — plus the two static company pages.
+ * Drives both the desktop header and the mobile nav.
  */
-export const passengerNav: NavItem[] = [
+export const primaryNav: NavItem[] = [
   {
-    label: "Plan a journey",
+    label: "Book Taxi",
     href: "/plan",
-    description: "Tell us where you're going — we match you to a driver already heading there.",
+    description: "Tell us where you're going — we match you to a driver already heading there, or book the whole taxi.",
   },
   {
-    label: "Rentals",
+    label: "Rent Vehicle",
     href: "/rentals",
-    description: "Self-drive cars and bikes across the corridor for when a shared journey isn't the fit.",
+    description: "Self-drive or with-driver vehicle hire across the corridor — a separate product from Book Taxi.",
   },
-];
-
-export const driverNav: NavItem[] = [
   {
-    label: "Driver workspace",
+    label: "Drive & Earn",
     href: "/driver",
     description: "Publish a journey and see who's already waiting for it.",
   },
+  {
+    label: "About",
+    href: "/about",
+    description: "How ReturnGo's return-journey matching works, and the products built on it.",
+  },
+  {
+    label: "Contact",
+    href: "/contact",
+    description: "Get in touch with the ReturnGo team.",
+  },
 ];
-
-/** Flat shortlist for the desktop header — passenger items first, driver last. */
-export const primaryNav: NavItem[] = [...passengerNav, ...driverNav];
 
 export const footerNav: { title: string; items: NavItem[] }[] = [
   {
-    title: "Passengers",
+    title: "Taxi",
     items: [
-      { label: "Plan a journey", href: "/plan", description: "" },
+      { label: "Book a taxi", href: "/plan", description: "" },
       { label: "Airport travel", href: "/plan?purpose=airport", description: "" },
       { label: "Hospital travel", href: "/plan?purpose=hospital", description: "" },
-      { label: "Rentals", href: "/rentals", description: "" },
     ],
   },
   {
-    title: "Drivers & fleets",
+    title: "Rentals",
+    items: [{ label: "Rent a vehicle", href: "/rentals", description: "" }],
+  },
+  {
+    title: "Drivers",
     items: [
+      { label: "Drive & Earn", href: "/driver", description: "" },
       { label: "Publish a journey", href: "/driver/publish", description: "" },
       { label: "Passenger requests", href: "/driver/requests", description: "" },
-      { label: "Driver workspace", href: "/driver", description: "" },
     ],
   },
   {
-    title: "Account",
+    title: "Company",
     items: [
-      { label: "Profile", href: "/profile", description: "" },
-      { label: "Settings", href: "/settings", description: "" },
+      { label: "About", href: "/about", description: "" },
+      { label: "Contact", href: "/contact", description: "" },
     ],
   },
 ];

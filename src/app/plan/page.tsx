@@ -11,7 +11,7 @@ export default function PlanJourneyPage() {
   return (
     <section className="mx-auto max-w-2xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
       <span className="font-mono text-xs font-medium uppercase tracking-widest text-secondary">
-        Step 1 of 3
+        Book Taxi
       </span>
       <h1 className="mt-3 font-display text-3xl font-semibold text-foreground sm:text-4xl">
         Plan your journey.

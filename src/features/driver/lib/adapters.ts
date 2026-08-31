@@ -1,7 +1,6 @@
 import { generateJourneyDemand, generateReturnDemand, type DemandCluster } from "@/features/matching/models/demand";
 import { matchReturnJourney, matchSharedJourney } from "@/features/matching/rules";
 import type { MatchCategory, MatchRequest, MatchResult, PoolJourney } from "@/features/matching/types";
-import { VEHICLE_LABEL } from "@/features/driver/lib/vehicles";
 import type { PublishedJourney } from "@/features/driver/types";
 
 /**
@@ -26,7 +25,7 @@ function toPoolJourney(
       name: journey.driverName,
       rating: 4.8,
       completedJourneys: 240,
-      vehicle: VEHICLE_LABEL[journey.vehicleType],
+      vehicle: journey.vehicleName,
       vehiclePlate: journey.vehiclePlate,
     },
     originId,

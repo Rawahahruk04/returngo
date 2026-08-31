@@ -1,5 +1,24 @@
 /** The Driver Workspace's vocabulary — deliberately small, no fleet/revenue/analytics concepts. */
-export type VehicleType = "innova" | "ertiga" | "swift-dzire" | "traveller";
+export type FuelType = "petrol" | "diesel" | "cng" | "electric";
+export type TransmissionType = "manual" | "automatic";
+
+export type DriverVehicle = {
+  name: string;
+  seats: number;
+  fuel: FuelType;
+  transmission: TransmissionType;
+  ac: boolean;
+};
+
+/** Set once in the Driver Profile — never re-asked when publishing a journey. */
+export type DriverProfile = {
+  name: string;
+  phone: string;
+  vehicleRegistration: string;
+  vehicle: DriverVehicle | null;
+  verified: boolean;
+  photoDataUrl?: string;
+};
 
 export type DriverJourneyPurpose = "airport" | "hospital" | "intercity";
 
@@ -11,7 +30,7 @@ export type PublishedJourneyCategory = "shared" | "return";
 export type PublishedJourney = {
   id: string;
   driverName: string;
-  vehicleType: VehicleType;
+  vehicleName: string;
   vehiclePlate: string;
   originId: string;
   destinationId: string;
@@ -23,6 +42,9 @@ export type PublishedJourney = {
   category: PublishedJourneyCategory;
   status: JourneyStatus;
   createdAt: number;
+  /** Price the driver is asking for the whole journey — shown on the card, not fed into the Match Engine's own fare math. */
+  price?: number;
+  notes?: string;
 };
 
 export type ReservationStatus = "pending" | "accepted" | "declined";
@@ -42,7 +64,7 @@ export type Reservation = {
 
 export type PublishJourneyInput = {
   driverName: string;
-  vehicleType: VehicleType;
+  vehicleName: string;
   vehiclePlate: string;
   originId: string;
   destinationId: string;
@@ -50,4 +72,6 @@ export type PublishJourneyInput = {
   time: string;
   seatsTotal: number;
   purpose: DriverJourneyPurpose;
+  price?: number;
+  notes?: string;
 };

@@ -4,7 +4,10 @@
  * match is the hero mechanic; the other three exist so the network
  * never shows an empty results screen when no return leg fits.
  */
-export type JourneyType = "airport" | "hospital" | "intercity" | "rental";
+export type JourneyType = "airport" | "hospital" | "intercity" | "local";
+
+/** Book Taxi step 2 — sharing is always optional. */
+export type TripType = "entire" | "share";
 
 export type LocationCategory = "town" | "airport" | "hospital";
 
@@ -62,5 +65,6 @@ export type JourneyPlanQuery = {
   time: string;
   passengers: number;
   journeyType: JourneyType;
+  tripType: TripType;
   flexible: boolean;
 };

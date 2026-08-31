@@ -1,11 +1,16 @@
+"use client";
+
 import Link from "next/link";
 
 import { primaryNav } from "@/config/nav";
 import { Logomark, Wordmark } from "@/components/brand/logomark";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { useDriverAuth } from "@/features/driver/data/auth-store";
 
 export function SiteHeader() {
+  const { isAuthenticated } = useDriverAuth();
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -28,10 +33,12 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           <Button asChild variant="outline" size="sm">
-            <Link href="/profile">Profile</Link>
+            <Link href={isAuthenticated ? "/driver" : "/driver/login"}>
+              {isAuthenticated ? "Dashboard" : "Driver Sign In"}
+            </Link>
           </Button>
           <Button asChild size="sm">
-            <Link href="/plan">Plan a journey</Link>
+            <Link href="/plan">Book Taxi</Link>
           </Button>
         </div>
 

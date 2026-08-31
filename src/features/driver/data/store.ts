@@ -107,7 +107,7 @@ export function publishReturnJourney(baseJourney: PublishedJourney, destinationI
   const journey: PublishedJourney = {
     id: nextId("return-journey"),
     driverName: baseJourney.driverName,
-    vehicleType: baseJourney.vehicleType,
+    vehicleName: baseJourney.vehicleName,
     vehiclePlate: baseJourney.vehiclePlate,
     originId: baseJourney.destinationId,
     destinationId,

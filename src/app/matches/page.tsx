@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Car, HeartPulse, Plane, Route as RouteIcon, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, HeartPulse, MapPin, Plane, Route as RouteIcon, Sparkles } from "lucide-react";
 
 import { getLocation } from "@/features/journey/data/locations";
 import { getMatchesForQuery } from "@/features/journey/data/matches";
-import type { JourneyType } from "@/features/journey/types";
+import type { JourneyType, TripType } from "@/features/journey/types";
 import { MatchCard } from "@/features/journey/components/match-card";
 import { RevealList } from "@/components/motion/reveal-list";
 import { Button } from "@/components/ui/button";
@@ -18,14 +18,18 @@ const JOURNEY_TYPE_META: Record<JourneyType, { label: string; icon: typeof Plane
   airport: { label: "Airport journey", icon: Plane, note: "Matches are ranked with buffer time before scheduled departures." },
   hospital: { label: "Hospital visit", icon: HeartPulse, note: "Matches are ranked with buffer time before appointment slots." },
   intercity: { label: "Intercity trip", icon: RouteIcon, note: "Ranked by how well each journey overlaps with your route." },
-  rental: { label: "Rental journey", icon: Car, note: "Self-drive options are shown alongside driver-matched journeys." },
+  local: { label: "Local trip", icon: MapPin, note: "Ranked by how well each journey overlaps with your route." },
 };
 
 function parseJourneyType(value: string | undefined): JourneyType {
-  if (value === "airport" || value === "hospital" || value === "intercity" || value === "rental") {
+  if (value === "airport" || value === "hospital" || value === "intercity" || value === "local") {
     return value;
   }
   return "intercity";
+}
+
+function parseTripType(value: string | undefined): TripType {
+  return value === "entire" ? "entire" : "share";
 }
 
 export default async function SmartMatchesPage({
@@ -40,6 +44,7 @@ export default async function SmartMatchesPage({
   const time = firstValue(params.time) ?? "08:00";
   const passengers = Number(firstValue(params.passengers) ?? "1") || 1;
   const journeyType = parseJourneyType(firstValue(params.type));
+  const tripType = parseTripType(firstValue(params.tripType));
   const flexible = firstValue(params.flexible) === "true";
 
   const origin = getLocation(originId);
@@ -47,14 +52,22 @@ export default async function SmartMatchesPage({
   const typeMeta = JOURNEY_TYPE_META[journeyType];
   const TypeIcon = typeMeta.icon;
 
-  const matches = getMatchesForQuery({
+  const allMatches = getMatchesForQuery({
     originId,
     destinationId,
     date,
     time,
     passengers,
     journeyType,
+    tripType,
     flexible,
+  });
+
+  // Book Taxi never mixes in Rental, and Trip Type narrows results to
+  // exactly the dedicated-vehicle vs. shared-seat kind the passenger chose.
+  const matches = allMatches.filter((match) => {
+    if (match.kind === "rental") return false;
+    return tripType === "entire" ? match.kind === "direct" : match.kind === "return" || match.kind === "shared";
   });
 
   const queryString = new URLSearchParams({
@@ -64,6 +77,7 @@ export default async function SmartMatchesPage({
     time,
     passengers: String(passengers),
     type: journeyType,
+    tripType,
   }).toString();
 
   return (
@@ -79,6 +93,9 @@ export default async function SmartMatchesPage({
         <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium uppercase tracking-widest text-secondary">
           <TypeIcon className="size-3.5" /> {typeMeta.label}
         </span>
+        <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+          {tripType === "entire" ? "Entire Taxi" : "Share Seat"}
+        </span>
         <span className="text-xs text-muted-foreground">Step 2 of 3</span>
       </div>
 
@@ -86,9 +103,11 @@ export default async function SmartMatchesPage({
         {origin?.name} to {destination?.name}
       </h1>
       <p className="mt-3 max-w-lg text-muted-foreground">
-        {matches.some((match) => match.kind === "return")
-          ? "Good news — a driver is already making this exact return leg. That match is ranked first below."
-          : "No empty return leg matches this route yet, but here's what's available now."}{" "}
+        {tripType === "entire"
+          ? "Here's a dedicated vehicle for your trip — no coordination with other passengers."
+          : matches.some((match) => match.kind === "return")
+            ? "Good news — a driver is already making this exact return leg. That match is ranked first below."
+            : "No empty return leg matches this route yet, but here's what's available now."}{" "}
         {typeMeta.note}
       </p>
 

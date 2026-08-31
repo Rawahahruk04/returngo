@@ -3,10 +3,10 @@ import Link from "next/link";
 import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { getLocation } from "@/features/journey/data/locations";
-import type { JourneyType } from "@/features/journey/types";
 import { RevealList } from "@/components/motion/reveal-list";
 import { Button } from "@/components/ui/button";
 import { runMatchEngine } from "@/features/matching/engine/match-engine";
+import type { MatchRequest } from "@/features/matching/types";
 import { ImpactCard } from "@/features/matching/components/impact-card";
 import { MatchResultCard } from "@/features/matching/components/match-result-card";
 
@@ -15,7 +15,14 @@ export const metadata: Metadata = {
   description: "How ReturnGo's rule-based match engine ranked this route — every recommendation, scored and explained.",
 };
 
-function parseJourneyType(value: string | undefined): JourneyType {
+/**
+ * Deliberately the Match Engine's own `journeyType` vocabulary
+ * (`MatchRequest["journeyType"]`), not the Book Taxi passenger flow's
+ * `JourneyType` — this page is the engine-reasoning showcase and can
+ * still exercise the engine's "rental" candidate tier even though
+ * Book Taxi itself no longer sends a "rental" purpose.
+ */
+function parseJourneyType(value: string | undefined): MatchRequest["journeyType"] {
   if (value === "airport" || value === "hospital" || value === "intercity" || value === "rental") {
     return value;
   }

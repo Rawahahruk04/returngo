@@ -1,9 +1,33 @@
 import Link from "next/link";
-import { ArrowRight, Fuel, Route as RouteIcon, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Car, Fuel, Route as RouteIcon, ShieldCheck, Sparkles, Users } from "lucide-react";
 
 import { locations } from "@/features/journey/data/locations";
 import { formatFare } from "@/features/journey/lib/geo";
 import { Button } from "@/components/ui/button";
+
+const PRODUCTS = [
+  {
+    icon: Users,
+    title: "Book Taxi",
+    description: "Airport, hospital, intercity, or local — share a seat and save, or book the entire taxi.",
+    href: "/plan",
+    cta: "Book a taxi",
+  },
+  {
+    icon: Car,
+    title: "Rent Vehicle",
+    description: "Self-drive or with a driver, for however long you need — a separate product from Book Taxi.",
+    href: "/rentals",
+    cta: "Rent a vehicle",
+  },
+  {
+    icon: RouteIcon,
+    title: "Drive & Earn",
+    description: "Publish a journey once, set up your vehicle in your profile, and let matched passengers find you.",
+    href: "/driver",
+    cta: "Start driving",
+  },
+];
 
 const STEPS = [
   {
@@ -63,11 +87,11 @@ export default function Home() {
         <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <Button asChild size="lg">
             <Link href="/plan">
-              Plan a journey <ArrowRight />
+              Book Taxi <ArrowRight />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/driver/publish">Publish a journey</Link>
+            <Link href="/driver">Drive &amp; Earn</Link>
           </Button>
         </div>
       </section>
@@ -78,6 +102,33 @@ export default function Home() {
           <StripStat value="5" label="Ranked match tiers, always explained" />
           <StripStat value={formatFare(450)} label="Typical saving on a matched return leg" />
         </dl>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
+        <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">One network, three products</h2>
+        <p className="mt-2 max-w-lg text-muted-foreground">
+          Taxi booking, vehicle rental, and the driver side each stand on their own — pick whichever fits what you
+          need right now.
+        </p>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          {PRODUCTS.map((product) => (
+            <Link
+              key={product.title}
+              href={product.href}
+              className="flex flex-col rounded-lg border border-border bg-card p-6 shadow-sm transition-colors hover:border-secondary/40"
+            >
+              <span className="flex size-10 items-center justify-center rounded-full bg-secondary/10 text-secondary">
+                <product.icon className="size-5" />
+              </span>
+              <h3 className="mt-4 font-display text-lg font-semibold text-foreground">{product.title}</h3>
+              <p className="mt-2 flex-1 text-sm text-muted-foreground">{product.description}</p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary">
+                {product.cta} <ArrowRight className="size-3.5" />
+              </span>
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
@@ -129,19 +180,22 @@ export default function Home() {
 
       <section className="mx-auto flex max-w-6xl flex-col items-start gap-4 px-4 py-20 sm:px-6 lg:px-8">
         <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium uppercase tracking-widest text-secondary">
-          <Users className="size-3.5" /> For drivers and passengers alike
+          <Users className="size-3.5" /> Wherever you&apos;re starting from
         </span>
         <h2 className="max-w-xl font-display text-2xl font-semibold text-foreground sm:text-3xl">
-          Start with whichever side of the journey you&apos;re on.
+          Book a taxi, rent a vehicle, or start driving.
         </h2>
         <div className="flex flex-col gap-3 pt-2 sm:flex-row">
           <Button asChild size="lg">
             <Link href="/plan">
-              Plan a journey <ArrowRight />
+              Book Taxi <ArrowRight />
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <Link href="/driver">Open the Driver Workspace</Link>
+            <Link href="/rentals">Rent Vehicle</Link>
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link href="/driver">Drive &amp; Earn</Link>
           </Button>
         </div>
       </section>

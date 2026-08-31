@@ -5,13 +5,19 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Calendar, Car, Users } from "lucide-react";
 
 import { getLocation } from "@/features/journey/data/locations";
-import { formatTime12h } from "@/features/journey/lib/geo";
+import { formatFare, formatTime12h } from "@/features/journey/lib/geo";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Stat } from "@/components/ui/stat";
 import { cancelJourney, completeJourney } from "@/features/driver/data/store";
-import { VEHICLE_LABEL } from "@/features/driver/lib/vehicles";
 import type { PublishedJourney } from "@/features/driver/types";
 import { JourneyStatusBadge } from "@/features/driver/components/journey-status-badge";
+
+const PURPOSE_LABEL: Record<PublishedJourney["purpose"], string> = {
+  airport: "Airport",
+  hospital: "Hospital",
+  intercity: "Intercity",
+};
 
 export function JourneyCard({ journey }: { journey: PublishedJourney }) {
   const router = useRouter();
@@ -35,15 +41,19 @@ export function JourneyCard({ journey }: { journey: PublishedJourney }) {
             {journey.date} &middot; {formatTime12h(journey.time)}
           </p>
         </div>
-        <JourneyStatusBadge status={journey.status} />
+        <div className="flex items-center gap-2">
+          <Badge variant="outline">{PURPOSE_LABEL[journey.purpose]}</Badge>
+          <JourneyStatusBadge status={journey.status} />
+        </div>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-border pt-4 sm:grid-cols-3">
+      <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-border pt-4 sm:grid-cols-4">
         <Stat
           icon={Car}
           label="Verified vehicle"
           mono={false}
-          value={`${VEHICLE_LABEL[journey.vehicleType]} · ${journey.vehiclePlate}`}
+          value={`${journey.vehicleName} · ${journey.vehiclePlate}`}
+          className="col-span-2 sm:col-span-1"
         />
         <Stat icon={Users} label="Seats" value={String(journey.seatsTotal)} />
         <Stat
@@ -51,7 +61,12 @@ export function JourneyCard({ journey }: { journey: PublishedJourney }) {
           value={`${journey.seatsReserved} of ${journey.seatsTotal}`}
           emphasis={journey.seatsReserved > 0}
         />
+        {typeof journey.price === "number" && <Stat label="Price" value={formatFare(journey.price)} />}
       </dl>
+
+      {journey.notes && (
+        <p className="mt-3 border-t border-border pt-3 text-sm text-muted-foreground">{journey.notes}</p>
+      )}
 
       {journey.status === "upcoming" && (
         <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">
